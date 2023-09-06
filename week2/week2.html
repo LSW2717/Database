@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Random Number Game</title>
+    <meta charset="UTF-8" />
+    <style>
+        /* 추가된 CSS */
+        #js-range {
+            background: linear-gradient(to right, blue, blue 0%, #ccc 0%, #ccc 100%);
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Random Number Game</h1>
+    <div id="js-title">
+        <h3 class="js-title">Generate a number between 0 and <span id="js-range-value">200</span></h3>
+        <datalist id="number">
+            <option value="50"></option>
+            <option value="100"></option>
+            <option value="150"></option>
+            <option value="200"></option>
+        </datalist>
+        <input list="number" id="js-range" type="range" min="5" max="200" value="5" step="5"
+            oninput="updateRangeValue()" />
+    </div>
+    <form id="js-guess">
+        <label for="num">Guess the number:</label>
+        <input id="num" type="number" max="200" min="0" />
+        <button id="scorebtn">Play!</button>
+    </form>
+    <div id="js-result">
+        <span></span>
+    </div>
+
+    <script>
+        const display = document.getElementById("js-result");
+        const range = document.getElementById("js-range");
+        const rangeValue = document.getElementById("js-range-value");
+        const guessInput = document.getElementById("num");
+
+        function generateRandomNumber(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        function updateRangeValue() {
+            rangeValue.textContent = range.value;
+        }
+
+        range.addEventListener("input", updateRangeValue);
+
+        function handlePrint(e) {
+            e.preventDefault();
+            const userGuess = parseInt(guessInput.value);
+            const computerGuess = generateRandomNumber(0, parseInt(range.value));
+            const displaySpan = display.querySelector("span");
+
+            let resultMessage = "";
+
+            if (userGuess === computerGuess) {
+                resultMessage = "<strong>You win!</strong>";
+            } else {
+                resultMessage = "<strong>You lose!</strong>";
+            }
+
+            resultMessage += `<br>You chose: ${userGuess}, the machine chose: ${computerGuess}.`;
+
+            displaySpan.innerHTML = resultMessage;
+        }
+
+        const printForm = document.getElementById("js-guess");
+        printForm.addEventListener("submit", handlePrint);
+    </script>
+</body>
+
+</html>
