@@ -1,0 +1,16 @@
+<h1>Query Apply</h1>
+
+<from name="employee" method="post" action="/">
+    <div>
+        <label for="Query">Query</label>
+        <input id="Query" name="Query" type="text" required placeholder="Query" />
+    </div>
+    <div>
+        <input type="submit" value="Apply" />
+    </div>
+</from>
+<div>
+    {{#each data}}
+    {{this}}<br>
+    {{/each}}
+</div>

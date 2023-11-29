@@ -1,0 +1,151 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${title}">Title</title>
+    <link rel="stylesheet" href="/init.css" type="text/css"/>
+    <link rel="stylesheet" type="text/css" href="/select.css"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+    <script>
+        const logout = () => {
+            window.location.href = "http://localhost:8080/logout"
+        };
+        const move = () => {
+            window.location.href = "http://localhost:8080/select"
+        };
+    </script>
+</head>
+<body>
+<script>
+    window.onload = function() {
+        if (document.getElementById("errorModal")) {
+            var modal = document.getElementById("errorModal");
+            modal.style.display = "block";
+            var span = document.getElementsByClassName("close")[0];
+            span.onclick = function() {
+                modal.style.display = "none";
+            }
+            window.onclick = function(event) {
+                if (event.target === modal) {
+                    modal.style.display = "none";
+                }
+            }
+        }
+    };
+</script>
+<!-- 모달 구조 -->
+<div id="errorModal" class="modal" th:if="${Error}">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <p th:text="${Error}"></p>
+    </div>
+</div>
+
+<div class="header">
+    <div class="header-logo">
+        <div class="logo"><img src="/img/inhaLogo.png" alt="INHA UNIVERSITY"/></div>
+        <span class="logo-text">Enrolment</span>
+    </div>
+
+    <div class="header-info">
+    <span class="header-info_title">Information on transitional measures related to 2021 curriculum reform (<span
+            class="header-info_title_strong">required for student numbers prior to 2020</span>) -> View details</span>
+    </div>
+</div>
+
+<div class="content">
+    <div class="side">
+        <div class="side-frame">
+            <div class="side-frame_id">
+                <div class="userinfo" th:text="${user}">User Info</div>
+                <button class="logout" onclick="logout()">Logout</button>
+            </div>
+        </div>
+        <div class="side-menu">
+            <div class="side-menu_list">
+                <span>Course information</span>
+                <span class="material-icons">add</span>
+            </div>
+            <div class="side-menu_list">
+                <span>Lecture diagnosis</span>
+                <span class="material-icons">add</span>
+            </div>
+            <div class="side-menu_list" onclick="move()">
+                <span>Enrolment</span>
+                <span class="material-icons">add</span>
+            </div>
+            <div class="side-menu_list">
+                <span>Grade confirmation</span>
+                <span class="material-icons">add</span>
+            </div>
+            <div class="side-menu_list">
+                <span>Seasonal semester</span>
+                <span class="material-icons">add</span>
+            </div>
+            <div class="side-menu_list">
+                <span>Subject inquiry</span>
+                <span class="material-icons">add</span>
+            </div>
+            <div class="side-menu_list">
+                <span>Reference Link</span>
+                <span class="material-icons">add</span>
+            </div>
+            <div class="side-menu_list">
+                <span>privacy policy</span>
+                <span class="material-icons">add</span>
+            </div>
+
+        </div>
+    </div>
+    <div class="main">
+        <div class="main-top">
+            <span class="main-top_title">Course registration for the 2nd semester of 2023</span>
+            <div class="main-top_table">
+                <h1 class="info" th:text="${title}">Title</h1>
+                <table>
+                    <tr>
+                        <td><b>Id</b></td>
+                        <td><b>Course</b></td>
+                        <td><b>Professor</b></td>
+                        <td><b>Opening Departments</b></td>
+                        <td><b>Maximum participants</b></td>
+                    </tr>
+                    <tr th:each="class : ${classes}">
+                        <td th:text="${class.id}">Id</td>
+                        <td th:text="${class.name}">Course</td>
+                        <td th:text="${class.professor}">Professor</td>
+                        <td th:text="${class.department.DName}">Opening Departments</td>
+                        <td th:text="${class.numberOfParticipant}">Maximum participants</td>
+                    </tr>
+                </table>
+
+                <h1 class="info" th:text="${title2}">Title2</h1>
+                <table>
+                    <tr>
+                        <td><b>Id</b></td>
+                        <td><b>Course</b></td>
+                        <td><b>Professor</b></td>
+                        <td><b>Opening Departments</b></td>
+                        <td><b>Maximum participants</b></td>
+                        <td><b>Remaining participants</b></td>
+                    </tr>
+                    <tr th:each="class : ${allClass}">
+                        <td th:text="${class.id}">Id</td>
+                        <td th:text="${class.name}">Course</td>
+                        <td th:text="${class.professor}">Professor</td>
+                        <td th:text="${class.department.DName}">Opening Departments</td>
+                        <td th:text="${class.numberOfParticipant}">Maximum participants</td>
+                        <td th:text="${class.remainingParticipant}" id="empty">Remaining participants</td>
+                        <td style="border: none; margin-left: 10px;">
+                            <form method="post" action="/select">
+                                <button style="margin-left: 10px;" name="applyBtn" type="submit" th:value="${class.id}">
+                                    Apply
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
