@@ -39,7 +39,4 @@ public class Examination {
         patient.getExaminations().add(this);
     }
 
-
-
-
 }
