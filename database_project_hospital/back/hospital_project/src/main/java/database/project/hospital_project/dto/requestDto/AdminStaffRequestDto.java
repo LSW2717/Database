@@ -5,7 +5,7 @@ import lombok.Getter;
 
 
 @Getter
-public class StaffRequestDto {
+public class AdminStaffRequestDto {
     private String name;
     private String address;
     private String phoneNumber;

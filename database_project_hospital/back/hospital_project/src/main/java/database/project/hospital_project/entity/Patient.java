@@ -44,7 +44,7 @@ public class Patient {
     @Column(name = "password")
     private String password;
 
-    @OneToOne(mappedBy = "patient")
+    @OneToOne(mappedBy = "patient", cascade = CascadeType.ALL)
     private Inpatient inpatient;
 
     @ManyToOne(fetch = FetchType.LAZY)

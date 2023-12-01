@@ -9,6 +9,8 @@ import java.util.List;
 
 @Repository
 public interface PatientRepository extends JpaRepository<Patient, Long> {
-    @Query("SELECT p FROM Patient p WHERE p.staff.id = :staffId")
+    @Query("SELECT p FROM Patient p JOIN FETCH p.staff s WHERE s.id = :staffId")
     List<Patient> findByStaffId(Long staffId);
+
+    Patient findByUsername(String username);
 }

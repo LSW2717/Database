@@ -1,7 +1,7 @@
 package database.project.hospital_project.service;
 
-import database.project.hospital_project.dto.requestDto.StaffRequestDto;
-import database.project.hospital_project.dto.responseDto.StaffResponseDto;
+import database.project.hospital_project.dto.requestDto.AdminStaffRequestDto;
+import database.project.hospital_project.dto.responseDto.AdminStaffResponseDto;
 import database.project.hospital_project.entity.Erole;
 import database.project.hospital_project.entity.MedicalSpecialty;
 import database.project.hospital_project.entity.MedicalStaff;
@@ -21,28 +21,28 @@ public class AdminService {
     private final MedicalStaffRepository medicalStaffRepository;
     private final MedicalSpecialtyRepository medicalSpecialtyRepository;
 
-    public List<StaffResponseDto> getAllNurses() {
-        List<MedicalStaff> nurses = medicalStaffRepository.findAllByRole(Erole.nurse);
+    public List<AdminStaffResponseDto> getAllNurses() {
+        List<MedicalStaff> nurses = medicalStaffRepository.findAllByRole(Erole.NURSE);
         return nurses.stream()
-                .map(StaffResponseDto::new)
+                .map(AdminStaffResponseDto::new)
                 .collect(Collectors.toList());
     }
 
-    public List<StaffResponseDto> getAllDoctors() {
-        List<MedicalStaff> doctors = medicalStaffRepository.findAllByRole(Erole.doctor);
+    public List<AdminStaffResponseDto> getAllDoctors() {
+        List<MedicalStaff> doctors = medicalStaffRepository.findAllByRole(Erole.DOCTOR);
         return doctors.stream()
-                .map(StaffResponseDto::new)
+                .map(AdminStaffResponseDto::new)
                 .collect(Collectors.toList());
     }
 
     @Transactional
-    public StaffResponseDto createStaff(StaffRequestDto request) {
+    public AdminStaffResponseDto createStaff(AdminStaffRequestDto request) {
         MedicalStaff staff = new MedicalStaff();
         return getStaffResponseDto(request, staff);
     }
 
     @Transactional
-    public StaffResponseDto updateStaff(Long id, StaffRequestDto request) {
+    public AdminStaffResponseDto updateStaff(Long id, AdminStaffRequestDto request) {
         MedicalStaff staff = medicalStaffRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("해당하는 직원이 없습니다."));
         return getStaffResponseDto(request, staff);
@@ -55,7 +55,7 @@ public class AdminService {
         medicalStaffRepository.delete(staff);
     }
 
-    private StaffResponseDto getStaffResponseDto(StaffRequestDto request, MedicalStaff staff) {
+    private AdminStaffResponseDto getStaffResponseDto(AdminStaffRequestDto request, MedicalStaff staff) {
         staff.setName(request.getName());
         staff.setAddress(request.getAddress());
         staff.setPhoneNumber(request.getPhoneNumber());
@@ -64,11 +64,14 @@ public class AdminService {
         staff.setRole(request.getRole());
 
         if (request.getDepartmentName() != null) {
-            MedicalSpecialty departmentName = medicalSpecialtyRepository.findByName(request.getDepartmentName())
-                    .orElseThrow(() -> new RuntimeException("해당 부서가 없습니다."));
+            MedicalSpecialty departmentName = medicalSpecialtyRepository.findByName(request.getDepartmentName());
             staff.setDepartment(departmentName);
         }
         MedicalStaff updateStaff = medicalStaffRepository.save(staff);
-        return new StaffResponseDto(updateStaff);
+        if (request.getDepartmentName() != null){
+            MedicalSpecialty department = medicalSpecialtyRepository.findByName(request.getDepartmentName());
+            department.addMedicalStaff(updateStaff);
+        }
+        return new AdminStaffResponseDto(updateStaff);
     }
 }

@@ -1,8 +1,8 @@
 package database.project.hospital_project.apicontroller;
 
 
-import database.project.hospital_project.dto.requestDto.StaffRequestDto;
-import database.project.hospital_project.dto.responseDto.StaffResponseDto;
+import database.project.hospital_project.dto.requestDto.AdminStaffRequestDto;
+import database.project.hospital_project.dto.responseDto.AdminStaffResponseDto;
 import database.project.hospital_project.service.AdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,29 +14,29 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/admin")
 @RequiredArgsConstructor
-public class adminPageApiController {
+public class AdminPageApiController {
     private final AdminService adminService;
 
     @GetMapping("/doctors")
-    public ResponseEntity<List<StaffResponseDto>> getAllDoctors(){
-        List<StaffResponseDto> doctors = adminService.getAllDoctors();
+    public ResponseEntity<List<AdminStaffResponseDto>> getAllDoctors(){
+        List<AdminStaffResponseDto> doctors = adminService.getAllDoctors();
         return ResponseEntity.ok(doctors);
     }
 
     @GetMapping("/nurses")
-    public ResponseEntity<List<StaffResponseDto>> getAllNurses(){
-        List<StaffResponseDto> nurses = adminService.getAllNurses();
+    public ResponseEntity<List<AdminStaffResponseDto>> getAllNurses(){
+        List<AdminStaffResponseDto> nurses = adminService.getAllNurses();
         return ResponseEntity.ok(nurses);
     }
 
     @PostMapping("/staff")
-    public ResponseEntity<StaffResponseDto> createStaff(@RequestBody StaffRequestDto request){
-        StaffResponseDto response = adminService.createStaff(request);
+    public ResponseEntity<AdminStaffResponseDto> createStaff(@RequestBody AdminStaffRequestDto request){
+        AdminStaffResponseDto response = adminService.createStaff(request);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
     @PutMapping("/staff/{id}")
-    public ResponseEntity<StaffResponseDto> updateStaff(@PathVariable Long id, @RequestBody StaffRequestDto request){
-        StaffResponseDto response = adminService.updateStaff(id, request);
+    public ResponseEntity<AdminStaffResponseDto> updateStaff(@PathVariable Long id, @RequestBody AdminStaffRequestDto request){
+        AdminStaffResponseDto response = adminService.updateStaff(id, request);
         return ResponseEntity.ok(response);
     }
 

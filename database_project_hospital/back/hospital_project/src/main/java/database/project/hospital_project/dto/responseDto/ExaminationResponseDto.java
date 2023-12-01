@@ -12,13 +12,13 @@ public class ExaminationResponseDto {
     private final LocalDateTime examinationDateTime;
     private final String examinationDetails;
     private final Long doctorId;
-    private final Long patientId;
+    private final PatientInfoResponseDto patient;
 
     public ExaminationResponseDto(Examination examination){
         this.id = examination.getId();
         this.examinationDateTime = examination.getExaminationDateTime();
         this.examinationDetails = examination.getExaminationDetails();
         this.doctorId = examination.getDoctor().getId();
-        this.patientId = examination.getPatient().getId();
+        this.patient = new PatientInfoResponseDto((examination.getPatient()));
     }
 }

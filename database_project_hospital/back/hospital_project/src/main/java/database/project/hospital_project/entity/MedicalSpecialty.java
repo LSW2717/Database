@@ -36,6 +36,11 @@ public class MedicalSpecialty {
         medicalStaff.setDepartment(this);
     }
 
+    public void removeMedicalStaff(MedicalStaff medicalStaff){
+        medicalStaffs.remove(medicalStaff);
+        medicalStaff.setDepartment(this);
+    }
+
     public void addReservation(Reservation reservation){
         reservations.add(reservation);
         reservation.setDepartment(this);

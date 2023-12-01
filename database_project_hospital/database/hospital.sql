@@ -16,7 +16,7 @@ CREATE TABLE medical_staff (
     department_id BIGINT,
     username VARCHAR(255),
     password VARCHAR(255),
-    role ENUM('doctor', 'nurse', 'admin'),
+    role ENUM('DOCTOR', 'NURSE', 'ADMIN'),
     FOREIGN KEY (department_id) REFERENCES medical_specialty(department_id)
 );
 

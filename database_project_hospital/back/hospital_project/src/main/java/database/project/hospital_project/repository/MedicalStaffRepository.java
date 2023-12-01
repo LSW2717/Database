@@ -12,4 +12,5 @@ import java.util.Optional;
 public interface MedicalStaffRepository extends JpaRepository<MedicalStaff, Long> {
 
     List<MedicalStaff> findAllByRole(Erole role);
+    MedicalStaff findByUsername(String username);
 }

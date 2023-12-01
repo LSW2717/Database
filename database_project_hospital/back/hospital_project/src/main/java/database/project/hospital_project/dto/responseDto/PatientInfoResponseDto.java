@@ -12,8 +12,7 @@ public class PatientInfoResponseDto {
     private final String bloodType;
     private final Float height;
     private final Float weight;
-    private final
-    String phoneNumber;
+    private final String phoneNumber;
 
     public PatientInfoResponseDto(Patient patient){
         this.id = patient.getId();

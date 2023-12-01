@@ -1,8 +1,10 @@
 package database.project.hospital_project.apicontroller;
 
 import database.project.hospital_project.dto.requestDto.ExaminationRequestDto;
+import database.project.hospital_project.dto.requestDto.InpatientRequestDto;
 import database.project.hospital_project.dto.responseDto.ExaminationResponseDto;
-import database.project.hospital_project.dto.responseDto.PatientInfoResponseDto;
+import database.project.hospital_project.dto.responseDto.InpatientResponseDto;
+import database.project.hospital_project.dto.responseDto.StaffWithPatientResponseDto;
 import database.project.hospital_project.service.DoctorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,19 +16,19 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/doctor")
 @RequiredArgsConstructor
-public class doctorPageApiController {
+public class DoctorPageApiController {
     private final DoctorService doctorService;
 
     @GetMapping("/{doctorId}/examinations")
     public ResponseEntity<List<ExaminationResponseDto>> getAllExaminations(@PathVariable Long doctorId){
-        List<ExaminationResponseDto> examinations = doctorService.getAllExaminationForDoctor(doctorId);
-        return ResponseEntity.ok(examinations);
+        List<ExaminationResponseDto> response = doctorService.getAllExaminationForDoctor(doctorId);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{doctorId}/patients")
-    public ResponseEntity<List<PatientInfoResponseDto>> getAllPatients(@PathVariable Long doctorId){
-        List<PatientInfoResponseDto> patients = doctorService.getAllPatientForDoctor(doctorId);
-        return ResponseEntity.ok(patients);
+    public ResponseEntity<StaffWithPatientResponseDto> getAllPatients(@PathVariable Long doctorId){
+        StaffWithPatientResponseDto response = doctorService.getDoctorWithPatients(doctorId);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/{doctorId}/examinations")
@@ -44,6 +46,18 @@ public class doctorPageApiController {
     @DeleteMapping("/{doctorId}/examinations/{examinationId}")
     public ResponseEntity<Void> deleteExamination(@PathVariable Long doctorId, @PathVariable Long examinationId){
         doctorService.deleteExamination(doctorId, examinationId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/{patientId}")
+    public ResponseEntity<InpatientResponseDto> admitPatient(@PathVariable Long patientId, InpatientRequestDto request){
+        InpatientResponseDto response = doctorService.admitPatient(patientId, request);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/{patientId}")
+    public ResponseEntity<Void> dischargePatient(@PathVariable Long patientId){
+        doctorService.dischargePatient(patientId);
         return ResponseEntity.noContent().build();
     }
 
