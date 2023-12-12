@@ -20,6 +20,12 @@ public class PatientPageApiController {
     private final PatientService patientService;
 
     @GetMapping("/{patientId}")
+    public ResponseEntity<PatientInfoResponseDto> getPatientInfo(@PathVariable Long patientId){
+        PatientInfoResponseDto response = patientService.getPatientInfo(patientId);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{patientId}/reservations")
     public ResponseEntity<List<PatientReservationResponseDto>> getPatientReservations(@PathVariable Long patientId){
         List<PatientReservationResponseDto> reservations = patientService.getReservationForPatient(patientId);
         return ResponseEntity.ok(reservations);

@@ -1,6 +1,7 @@
 package database.project.hospital_project.service;
 
 import database.project.hospital_project.dto.requestDto.PatientReservationRequestDto;
+import database.project.hospital_project.dto.responseDto.PatientInfoResponseDto;
 import database.project.hospital_project.dto.responseDto.PatientReservationResponseDto;
 import database.project.hospital_project.entity.MedicalSpecialty;
 import database.project.hospital_project.entity.Patient;
@@ -24,6 +25,11 @@ public class PatientService {
     private final ReservationRepository reservationRepository;
     private final MedicalSpecialtyRepository medicalSpecialtyRepository;
 
+    public PatientInfoResponseDto getPatientInfo(Long patientId){
+        Patient patient = patientRepository.findById(patientId)
+                .orElseThrow(() -> new RuntimeException("해당아이디의 환자가 없습니다."));
+        return new PatientInfoResponseDto(patient);
+    }
     public List<PatientReservationResponseDto> getReservationForPatient(Long patientId){
         List<Reservation> reservations = reservationRepository.findAllByPatientId(patientId);
         return reservations.stream()

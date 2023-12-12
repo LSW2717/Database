@@ -42,13 +42,13 @@ public class MedicalStaff {
     @JoinColumn(name = "department_id")
     private MedicalSpecialty department;
 
-    @OneToMany(mappedBy = "staff")
+    @OneToMany(mappedBy = "staff", cascade = CascadeType.ALL)
     private List<Patient> patients = new ArrayList<>();
 
-    @OneToMany(mappedBy = "doctor")
+    @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL)
     private List<Examination> examinations = new ArrayList<>();
 
-    @OneToMany(mappedBy = "nurse")
+    @OneToMany(mappedBy = "nurse", cascade = CascadeType.ALL)
     private List<Treatment> treatments = new ArrayList<>();
 
 

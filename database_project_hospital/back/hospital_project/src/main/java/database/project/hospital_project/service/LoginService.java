@@ -26,14 +26,16 @@ public class LoginService {
         // MedicalStaff에서 사용자 검색
         Optional<MedicalStaff> staff = Optional.ofNullable(medicalStaffRepository.findByUsername(username));
         if (staff.isPresent() && staff.get().getPassword().equals(password)) {
+            Long id = staff.get().getId();
             String userType = getUserType(staff.get().getRole());
-            return new LoginResponseDto(username, userType);
+            return new LoginResponseDto(id, username, userType);
         }
 
         // Patient에서 사용자 검색
         Optional<Patient> patient = Optional.ofNullable(patientRepository.findByUsername(username));
         if (patient.isPresent() && patient.get().getPassword().equals(password)) {
-            return new LoginResponseDto(username, "Patient");
+            Long id = patient.get().getId();
+            return new LoginResponseDto(id, username, "Patient");
         }
 
         throw new RuntimeException("Invalid username or password");

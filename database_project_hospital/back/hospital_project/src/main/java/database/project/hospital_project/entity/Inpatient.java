@@ -21,7 +21,7 @@ public class Inpatient {
     private String roomInformation;
 
     @Column(name = "admission_date")
-    private LocalDateTime admissionDate;
+    private LocalDateTime admissionDateTime;
 
     @Column(name = "discharge_date_time")
     private LocalDateTime dischargeDateTime;
