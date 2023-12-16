@@ -2,6 +2,8 @@ package database.project.hospital_project.apicontroller;
 
 
 import database.project.hospital_project.dto.requestDto.TreatmentRequestDto;
+import database.project.hospital_project.dto.responseDto.InpatientResponseDto;
+import database.project.hospital_project.dto.responseDto.PatientInfoResponseDto;
 import database.project.hospital_project.dto.responseDto.StaffWithPatientResponseDto;
 import database.project.hospital_project.dto.responseDto.TreatmentResponseDto;
 import database.project.hospital_project.service.NurseService;
@@ -24,8 +26,14 @@ public class NursePageApiController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/patients")
+    public ResponseEntity<List<PatientInfoResponseDto>> getAllPatients(){
+        List<PatientInfoResponseDto> response = nurseService.getAllPatients();
+        return ResponseEntity.ok(response);
+    }
+
     @GetMapping("/{nurseId}/patients")
-    public ResponseEntity<StaffWithPatientResponseDto> getAllPatients(@PathVariable Long nurseId){
+    public ResponseEntity<StaffWithPatientResponseDto> getAllPatientsWithNurse(@PathVariable Long nurseId){
         StaffWithPatientResponseDto response = nurseService.getNurseWithPatients(nurseId);
         return ResponseEntity.ok(response);
     }
@@ -47,5 +55,12 @@ public class NursePageApiController {
         nurseService.deleteTreatment(nurseId, treatmentId);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/inpatients")
+    public ResponseEntity<List<InpatientResponseDto>> getAllInpatients(){
+        List<InpatientResponseDto> response = nurseService.getAllInpatients();
+        return ResponseEntity.ok(response);
+    }
+
 
 }

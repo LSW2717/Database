@@ -1,7 +1,6 @@
 package database.project.hospital_project.service;
 
 import database.project.hospital_project.dto.requestDto.ExaminationRequestDto;
-import database.project.hospital_project.dto.requestDto.InpatientRequestDto;
 import database.project.hospital_project.dto.responseDto.ExaminationResponseDto;
 import database.project.hospital_project.dto.responseDto.InpatientResponseDto;
 import database.project.hospital_project.dto.responseDto.PatientInfoResponseDto;
@@ -18,7 +17,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,20 +29,28 @@ public class DoctorService {
     private final PatientRepository patientRepository;
     private final InpatientRepository inpatientRepository;
 
-    public List<ExaminationResponseDto> getAllExaminationForDoctor(Long doctorId){
+    public List<ExaminationResponseDto> getAllExaminationForDoctor(Long doctorId) {
         List<Examination> examinations = examinationRepository.findByDoctorId(doctorId);
         return examinations.stream()
                 .map(ExaminationResponseDto::new)
                 .collect(Collectors.toList());
     }
-    public StaffWithPatientResponseDto getDoctorWithPatients(Long doctorId){
+
+    public StaffWithPatientResponseDto getDoctorWithPatients(Long doctorId) {
         MedicalStaff doctor = medicalStaffRepository.findById(doctorId)
                 .orElseThrow(() -> new RuntimeException("해당 의사가 없습니다."));
         return new StaffWithPatientResponseDto(doctor);
     }
 
+    public List<PatientInfoResponseDto> getAllPatients() {
+        List<Patient> patients = patientRepository.findAll();
+        return patients.stream()
+                .map(PatientInfoResponseDto::new)
+                .collect(Collectors.toList());
+    }
+
     @Transactional
-    public ExaminationResponseDto createExamination(Long doctorId, ExaminationRequestDto request){
+    public ExaminationResponseDto createExamination(Long doctorId, ExaminationRequestDto request) {
         MedicalStaff doctor = medicalStaffRepository.findById(doctorId)
                 .orElseThrow(() -> new RuntimeException("해당 의사가 없습니다."));
         Patient patient = patientRepository.findById(request.getPatientId())
@@ -61,7 +67,7 @@ public class DoctorService {
     }
 
     @Transactional
-    public ExaminationResponseDto updateExamination(Long doctorId, Long examinationId, ExaminationRequestDto request){
+    public ExaminationResponseDto updateExamination(Long doctorId, Long examinationId, ExaminationRequestDto request) {
         Examination examination = examinationRepository.findById(examinationId)
                 .orElseThrow(() -> new RuntimeException("해당 검사가 없습니다."));
 
@@ -78,7 +84,7 @@ public class DoctorService {
     }
 
     @Transactional
-    public void deleteExamination(Long doctorId, Long examinationId){
+    public void deleteExamination(Long doctorId, Long examinationId) {
         Examination examination = examinationRepository.findById(examinationId)
                 .orElseThrow(() -> new RuntimeException("해당 검사가 없습니다."));
 
@@ -89,27 +95,11 @@ public class DoctorService {
         examinationRepository.delete(examination);
     }
 
-    @Transactional
-    public InpatientResponseDto admitPatient(Long patientId, InpatientRequestDto request){
-        Patient patient = patientRepository.findById(patientId)
-                .orElseThrow(() -> new RuntimeException("해당 환자가 없습니다."));
-        if (patient.getInpatient() != null) {
-            throw new IllegalStateException("Patient is already admitted");
-        }
-        Inpatient inpatient = new Inpatient();
-        inpatient.setPatient(patient);
-        inpatient.setRoomInformation(request.getRoomInformation());
-        inpatient.setAdmissionDate(request.getAdmissionDate());
-        inpatient.setDischargeDateTime(request.getDischargeDateTime());
-        Inpatient savedInpatient = inpatientRepository.save(inpatient);
-        return new InpatientResponseDto(savedInpatient);
+    public List<InpatientResponseDto> getAllInpatients() {
+        List<Inpatient> inpatients = inpatientRepository.findAll();
+        return inpatients.stream()
+                .map(InpatientResponseDto::new)
+                .collect(Collectors.toList());
     }
-
-    @Transactional
-    public void dischargePatient(Long patientId){
-        Inpatient inpatient = inpatientRepository.findByPatientId(patientId);
-        inpatientRepository.delete(inpatient);
-    }
-
 
 }

@@ -1,9 +1,9 @@
 package database.project.hospital_project.apicontroller;
 
 import database.project.hospital_project.dto.requestDto.ExaminationRequestDto;
-import database.project.hospital_project.dto.requestDto.InpatientRequestDto;
 import database.project.hospital_project.dto.responseDto.ExaminationResponseDto;
 import database.project.hospital_project.dto.responseDto.InpatientResponseDto;
+import database.project.hospital_project.dto.responseDto.PatientInfoResponseDto;
 import database.project.hospital_project.dto.responseDto.StaffWithPatientResponseDto;
 import database.project.hospital_project.service.DoctorService;
 import lombok.RequiredArgsConstructor;
@@ -26,10 +26,16 @@ public class DoctorPageApiController {
     }
 
     @GetMapping("/{doctorId}/patients")
-    public ResponseEntity<StaffWithPatientResponseDto> getAllPatients(@PathVariable Long doctorId){
+    public ResponseEntity<StaffWithPatientResponseDto> getAllPatientsWithDoctor(@PathVariable Long doctorId){
         StaffWithPatientResponseDto response = doctorService.getDoctorWithPatients(doctorId);
         return ResponseEntity.ok(response);
     }
+    @GetMapping("/patients")
+    public ResponseEntity<List<PatientInfoResponseDto>> getAllPatients(){
+        List<PatientInfoResponseDto> response = doctorService.getAllPatients();
+        return ResponseEntity.ok(response);
+    }
+
 
     @PostMapping("/{doctorId}/examinations")
     public ResponseEntity<ExaminationResponseDto> createExamination(@PathVariable Long doctorId, @RequestBody ExaminationRequestDto request){
@@ -49,16 +55,9 @@ public class DoctorPageApiController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/{patientId}")
-    public ResponseEntity<InpatientResponseDto> admitPatient(@PathVariable Long patientId, InpatientRequestDto request){
-        InpatientResponseDto response = doctorService.admitPatient(patientId, request);
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    @GetMapping("/inpatients")
+    public ResponseEntity<List<InpatientResponseDto>> getAllInpatients(){
+        List<InpatientResponseDto> response = doctorService.getAllInpatients();
+        return ResponseEntity.ok(response);
     }
-
-    @DeleteMapping("/{patientId}")
-    public ResponseEntity<Void> dischargePatient(@PathVariable Long patientId){
-        doctorService.dischargePatient(patientId);
-        return ResponseEntity.noContent().build();
-    }
-
 }

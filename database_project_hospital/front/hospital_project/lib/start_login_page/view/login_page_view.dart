@@ -15,19 +15,13 @@ class LoginPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final loginState = ref.watch(loginPageViewModelProvider);
 
-    Widget _buildStateUI() {
-      if (loginState is LoadingLoginState) {
-        return const CircularProgressIndicator();
-      } else if (loginState is ErrorLoginState) {
-        return Text(loginState.errorMessage);
-      } else if (loginState is SuccessLoginState) {
-        final patientPageViewModel =
-            ref.read(patientPageViewModelProvider.notifier);
-        patientPageViewModel.setCurrentUserId(loginState.id);
-        Future.microtask(() => context.go('/${loginState.userType}'));
-        return Container();
-      }
-      return Container();
+    if (loginState is SuccessLoginState) {
+      Future.microtask(() => context.go('/${loginState.userType}'));
+      return Container(); // 혹은 로딩 화면
+    } else if (loginState is LoadingLoginState) {
+      return Center(child: CircularProgressIndicator());
+    } else if (loginState is ErrorLoginState) {
+      return Text(loginState.errorMessage);
     }
 
     String username = '';
@@ -82,7 +76,6 @@ class LoginPage extends ConsumerWidget {
                     },
                     child: Text('login'),
                   ),
-                  _buildStateUI(),
                 ],
               ),
             ),

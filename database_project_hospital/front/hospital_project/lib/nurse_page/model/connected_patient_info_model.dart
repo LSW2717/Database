@@ -1,20 +1,20 @@
 import 'package:json_annotation/json_annotation.dart';
-
-part 'patient_info_response_model.g.dart';
+part 'connected_patient_info_model.g.dart';
 
 @JsonSerializable()
-class PatientInfoResponseModel {
+class Patient {
   final int id;
   final String name;
+  final String socialSecurityNumber;
   final String gender;
   final String bloodType;
   final double height;
   final double weight;
   final String phoneNumber;
-
-  PatientInfoResponseModel({
+  Patient({
     required this.id,
     required this.name,
+    required this.socialSecurityNumber,
     required this.gender,
     required this.bloodType,
     required this.height,
@@ -22,8 +22,6 @@ class PatientInfoResponseModel {
     required this.phoneNumber,
   });
 
-  factory PatientInfoResponseModel.fromJson(Map<String, dynamic> json) =>
-      _$PatientInfoResponseModelFromJson(json);
-
-  Map<String, dynamic> toJson() => _$PatientInfoResponseModelToJson(this);
+  factory Patient.fromJson(Map<String, dynamic> json) => _$PatientFromJson(json);
+  Map<String, dynamic> toJson() => _$PatientToJson(this);
 }

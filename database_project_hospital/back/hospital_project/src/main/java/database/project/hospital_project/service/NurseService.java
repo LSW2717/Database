@@ -2,13 +2,9 @@ package database.project.hospital_project.service;
 
 import database.project.hospital_project.dto.requestDto.ExaminationRequestDto;
 import database.project.hospital_project.dto.requestDto.TreatmentRequestDto;
-import database.project.hospital_project.dto.responseDto.ExaminationResponseDto;
-import database.project.hospital_project.dto.responseDto.StaffWithPatientResponseDto;
-import database.project.hospital_project.dto.responseDto.TreatmentResponseDto;
-import database.project.hospital_project.entity.Examination;
-import database.project.hospital_project.entity.MedicalStaff;
-import database.project.hospital_project.entity.Patient;
-import database.project.hospital_project.entity.Treatment;
+import database.project.hospital_project.dto.responseDto.*;
+import database.project.hospital_project.entity.*;
+import database.project.hospital_project.repository.InpatientRepository;
 import database.project.hospital_project.repository.MedicalStaffRepository;
 import database.project.hospital_project.repository.PatientRepository;
 import database.project.hospital_project.repository.TreatmentRepository;
@@ -26,6 +22,7 @@ public class NurseService {
     private final MedicalStaffRepository medicalStaffRepository;
     private final TreatmentRepository treatmentRepository;
     private final PatientRepository patientRepository;
+    private final InpatientRepository inpatientRepository;
 
     public List<TreatmentResponseDto> getAllTreatmentsForNurse(Long nurseId) {
         List<Treatment> treatments = treatmentRepository.findAllByNurseId(nurseId);
@@ -38,6 +35,13 @@ public class NurseService {
         MedicalStaff nurse = medicalStaffRepository.findById(nurseId)
                 .orElseThrow(() -> new RuntimeException("해당 간호사가 없습니다."));
         return new StaffWithPatientResponseDto(nurse);
+    }
+
+    public List<PatientInfoResponseDto> getAllPatients(){
+        List<Patient> patients = patientRepository.findAll();
+        return patients.stream()
+                .map(PatientInfoResponseDto::new)
+                .collect(Collectors.toList());
     }
 
     @Transactional
@@ -83,6 +87,13 @@ public class NurseService {
             throw new RuntimeException("해당 간호사의 치료가 아닙니다.");
         }
         treatmentRepository.delete(treatment);
+    }
+
+    public List<InpatientResponseDto> getAllInpatients() {
+        List<Inpatient> inpatients = inpatientRepository.findAll();
+        return inpatients.stream()
+                .map(InpatientResponseDto::new)
+                .collect(Collectors.toList());
     }
 
 

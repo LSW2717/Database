@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hospital_project/admin_page/model/admin_response_model.dart';
 import 'package:hospital_project/admin_page/view_model/admin_page_view_model.dart';
 import 'package:hospital_project/common/const/colors.dart';
@@ -32,8 +33,14 @@ class AdminPage extends ConsumerWidget {
       // 기존의 로직
       contentWidget = StaffCard(data: data);
     }
+
+    void _handleLogout(){
+      ref.read(loginPageViewModelProvider.notifier).logout();
+      context.go('/');
+    }
     return DefaultLayout(
       title: 'admin page',
+      onLogout: _handleLogout,
       child: Container(
         color: MAIN_COLOR,
         child: Row(

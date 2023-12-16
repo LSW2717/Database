@@ -27,8 +27,12 @@ class LoginPageViewModel extends StateNotifier<LoginState> {
           username: response.username,
           userType: response.userType);
     } catch (e) {
-      state = ErrorLoginState(errorMessage: e.toString());
+      state = ErrorLoginState(errorMessage: "일치하는 아이디와 비밀번호가 없습니다.");
     }
+  }
+  void logout() async {
+    await secureStorage.delete(key: "userId");
+    state = InitialLoginState();
   }
 }
 

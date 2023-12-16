@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hospital_project/patient_page/component/patient_info_card.dart';
 import 'package:hospital_project/patient_page/component/patient_reservation_card.dart';
 import 'package:hospital_project/patient_page/view_model/patient_page_view_model.dart';
+import 'package:hospital_project/start_login_page/view_model/login_page_view_model.dart';
 
 import '../../common/const/colors.dart';
 import '../../common/layout/default_layout.dart';
@@ -35,8 +37,14 @@ class PatientPage extends ConsumerWidget {
     } else {
       patientInfoWidget = Center(child: Text("환자 정보를 불러오세요."));
     }
+
+    void _handleLogout(){
+      ref.read(loginPageViewModelProvider.notifier).logout();
+      context.go('/');
+    }
     return DefaultLayout(
       title: 'Patient page',
+      onLogout: _handleLogout,
       child: Container(
         color: MAIN_COLOR,
         child: Row(
