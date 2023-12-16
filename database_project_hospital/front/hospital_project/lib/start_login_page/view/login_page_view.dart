@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hospital_project/patient_page/view_model/patient_page_view_model.dart';
 import 'package:hospital_project/start_login_page/component/custom_text_form_field.dart';
 import 'package:hospital_project/start_login_page/model/login_request_model.dart';
 import 'package:hospital_project/start_login_page/view_model/login_page_view_model.dart';
@@ -21,7 +20,18 @@ class LoginPage extends ConsumerWidget {
     } else if (loginState is LoadingLoginState) {
       return Center(child: CircularProgressIndicator());
     } else if (loginState is ErrorLoginState) {
-      return Text(loginState.errorMessage);
+      // return Text(loginState.errorMessage);
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text("로그인 오류"),
+              content: Text(loginState.errorMessage),
+            );
+          },
+        );
+      });
     }
 
     String username = '';
