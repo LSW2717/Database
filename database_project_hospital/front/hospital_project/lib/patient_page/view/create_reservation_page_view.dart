@@ -54,7 +54,7 @@ class CreateReservationPage extends ConsumerWidget {
                       .setSelectedDepartment(newValue);
                 }
               },
-              items: <String>['심장과', '신경과', '소아과'].map<
+              items: <String>['심장과', '신경과', '소아과', '이빈후과', '내과', '외과'].map<
                   DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
